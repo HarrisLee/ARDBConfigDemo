@@ -71,9 +71,9 @@
 - (void)insertStudent
 {
     NSMutableArray *items = [[NSMutableArray alloc] init];
-    for(int idx = 0; idx < 100000; idx ++){
+    for(int idx = 0; idx < 1000000; idx ++){
         Student *student = [[Student alloc] init];
-        student.stuId = idx + 340000;
+        student.stuId = idx + 3400000;
         student.name = [NSString stringWithFormat:@"学生%d",idx];
         student.age = arc4random()%10 + 10;
         [items addObject:student];
@@ -110,26 +110,32 @@
 //        }
 //    }];
     
-    //************第三种数据插入方式，事务处理的方式************
-    [_db beginTransaction];
-    @try {
-        for (int i = 0;i < items.count ; i ++) {
-            Student *stu = [items objectAtIndex:i];
-            NSString *sql = [NSString stringWithFormat:@"insert into t_student (name,age,age1,age2,age3,age4,age5,age6,age7,age8,age9,age10) values ('%@',%d,'%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",stu.name,stu.age,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name];
-            [_db executeUpdate:sql];
-        }
-    }
-    @catch (NSException *exception)
-    {
-        [_db rollback];
-    }
-    @finally
-    {
-        [_db commit];
-    }
     
-    [_db close];
-    NSLog(@"1111111111");
+    //************第三种数据插入方式，事务处理的方式************
+
+    dispatch_queue_t queue = dispatch_queue_create("com.suning.smarthome", DISPATCH_QUEUE_SERIAL);
+    dispatch_async(queue, ^{
+        [_db beginTransaction];
+//    [_db beginDeferredTransaction];
+        @try {
+            for (int i = 0;i < items.count ; i ++) {
+                Student *stu = [items objectAtIndex:i];
+                NSString *sql = [NSString stringWithFormat:@"insert into t_student (name,age,age1,age2,age3,age4,age5,age6,age7,age8,age9,age10) values ('%@',%d,'%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",stu.name,stu.age,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name];
+                [_db executeUpdate:sql];
+            }
+        }
+        @catch (NSException *exception)
+        {
+            [_db rollback];
+        }
+        @finally
+        {
+            [_db commit];
+        }
+        
+        [_db close];
+        NSLog(@"1111111111");
+    });
 }
 
 - (void)passWordTextFieldRightBtnClik
