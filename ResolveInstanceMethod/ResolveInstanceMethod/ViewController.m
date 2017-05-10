@@ -60,7 +60,7 @@
     if ([_db open])
     {
         //4.创表
-        BOOL result = [_db executeUpdate:@"CREATE TABLE IF NOT EXISTS t_student (id integer PRIMARY KEY, name text NOT NULL, age integer NOT NULL,age1 integer NOT NULL,age2 integer NOT NULL,age3 integer NOT NULL,age4 integer NOT NULL,age5 integer NOT NULL,age6 integer NOT NULL,age7 integer NOT NULL,age8 integer NOT NULL,age9 integer NOT NULL,age10 integer NOT NULL);"];
+        BOOL result = [_db executeUpdate:@"CREATE TABLE IF NOT EXISTS t_student (id integer PRIMARY KEY AUTOINCREMENT, name text NOT NULL, age integer NOT NULL,age1 integer NOT NULL,age2 integer NOT NULL,age3 integer NOT NULL,age4 integer NOT NULL,age5 integer NOT NULL,age6 integer NOT NULL,age7 integer NOT NULL,age8 integer NOT NULL,age9 integer NOT NULL,age10 integer NOT NULL);"];
         NSLog(@"%@",result ? @"创建表成功" : @"创建表失败");
         if (result) {
             [self insertStudent];
@@ -71,7 +71,7 @@
 - (void)insertStudent
 {
     NSMutableArray *items = [[NSMutableArray alloc] init];
-    for(int idx = 0; idx < 40; idx ++){
+    for(int idx = 0; idx < 100000; idx ++){
         Student *student = [[Student alloc] init];
         student.stuId = idx + 340000;
         student.name = [NSString stringWithFormat:@"学生%d",idx];
@@ -93,7 +93,7 @@
 //    [queue inDatabase:^(FMDatabase *db) {
 //        for (int i = 0;i < items.count ; i ++) {
 //            Student *stu = [items objectAtIndex:i];
-//            NSString *sql = [NSString stringWithFormat:@"insert into t_student (id,name,age,age1,age2,age3,age4,age5,age6,age7,age8,age9,age10) values (%d,'%@',%d,'%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",stu.stuId,stu.name,stu.age,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name];
+//            NSString *sql = [NSString stringWithFormat:@"insert into t_student (name,age,age1,age2,age3,age4,age5,age6,age7,age8,age9,age10) values ('%@',%d,'%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",stu.name,stu.age,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name];
 //            [db executeUpdate:sql];
 //        }
 //    }];
@@ -105,7 +105,7 @@
 //    [queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
 //        for (int i = 0;i < items.count ; i ++) {
 //            Student *stu = [items objectAtIndex:i];
-//            NSString *sql = [NSString stringWithFormat:@"insert into t_student (id,name,age,age1,age2,age3,age4,age5,age6,age7,age8,age9,age10) values (%d,'%@',%d,'%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",stu.stuId,stu.name,stu.age,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name];
+//            NSString *sql = [NSString stringWithFormat:@"insert into t_student (name,age,age1,age2,age3,age4,age5,age6,age7,age8,age9,age10) values ('%@',%d,'%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",stu.name,stu.age,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name];
 //            [db executeUpdate:sql];
 //        }
 //    }];
@@ -115,7 +115,7 @@
     @try {
         for (int i = 0;i < items.count ; i ++) {
             Student *stu = [items objectAtIndex:i];
-            NSString *sql = [NSString stringWithFormat:@"insert into t_student (id,name,age,age1,age2,age3,age4,age5,age6,age7,age8,age9,age10) values (%d,'%@',%d,'%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",stu.stuId,stu.name,stu.age,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name];
+            NSString *sql = [NSString stringWithFormat:@"insert into t_student (name,age,age1,age2,age3,age4,age5,age6,age7,age8,age9,age10) values ('%@',%d,'%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",stu.name,stu.age,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name,stu.name];
             [_db executeUpdate:sql];
         }
     }
